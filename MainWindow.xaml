@@ -6,17 +6,39 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winex="using:WinUIEx"
-    mc:Ignorable="d">
-    <Grid>
+    mc:Ignorable="d"
+    Height="400" Width="400"
+    
+    >
+    <Grid  >
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Image x:Name="selectedImage" />
+        <Grid.Resources>
+            <CommandBarFlyout x:Name="ImageCommandsFlyout">
+                <AppBarButton Icon="OpenLocal" ToolTipService.ToolTip="Open image" Click="OpenFileWindow_Click"/>
+                <AppBarToggleButton Icon="Pin"  x:Name="pinToTopToggleButton" ToolTipService.ToolTip="Pin to Front" Click="pinToTopToggle"/>
+            </CommandBarFlyout>
+        </Grid.Resources>
+        <Image x:Name="selectedImage" Stretch="Uniform"
+               Tapped="Image_Tapped" FlyoutBase.AttachedFlyout="{x:Bind ImageCommandsFlyout}"
+               ContextFlyout="{x:Bind ImageCommandsFlyout}"/>
 
-        <Button Click="OpenFileWindow" Content="Open Picture" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20"/> 
+        <!--<CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Bottom" Foreground="LightGreen">
+
+            <CommandBar.SecondaryCommands>
+            <AppBarButton Icon="OpenLocal" Label="Open Picture" Click="OpenFileWindow_Click"/>
+            <AppBarToggleButton Icon="Pin" Label="Pin to top" x:Name="pinToTopToggleButton" Content="Pin to Front" Click="pinToTopToggle"/>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>-->
+
+
+
     </Grid>
 
 </winex:WindowEx>

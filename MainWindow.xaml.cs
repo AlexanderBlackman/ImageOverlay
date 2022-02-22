@@ -20,6 +20,7 @@ using WinUIEx;
 using Windows.Storage;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -37,8 +38,11 @@ namespace ImageOverlay
         void Initialize([In] IntPtr hwnd);
     }
 
+   
+
     public sealed partial class MainWindow : WindowEx
     {
+        double ratio;
 
         //[DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto, PreserveSig = true, SetLastError = false)]
         //public static extern IntPtr GetActiveWindow();
@@ -46,13 +50,37 @@ namespace ImageOverlay
         public MainWindow()
         {
             this.InitializeComponent();
+            // this.SizeChanged += MainWindow_SizeChanged; 
+            string[] arguments = Environment.GetCommandLineArgs();
+            LoadImageOnLaunch();
             
-            SetImageSource();
+            
+            
+           // OpenFileWindow();
+
         }
+
+        private void MainWindow_SizeChanged(object sender, WindowSizeChangedEventArgs args)
+        {
+            //selectedImage.Width = args.Size.Width;
+            //selectedImage.Height = args.Size.Width * ratio;
+        }
+
+        private void LoadImageOnLaunch()
+        {
+            string[] arguments = Environment.GetCommandLineArgs();
+            if (arguments.Length > 1 )
+            {
+                selectedImage.Source = new BitmapImage(new Uri(arguments[1]));
+            }
+            else
+                OpenFileWindow();
+        }
+
 
         public void SetImageSource()
         {
-          //  string[] arguments = Environment.GetCommandLineArgs();
+          //  
           ////selectedImage.Source = new BitmapImage(new Uri("b://847.jpg"));
 
           //  if (arguments[1] != null)
@@ -60,74 +88,84 @@ namespace ImageOverlay
 
         }
 
-        private async void OpenFileWindow(object sender, RoutedEventArgs e)
+        private async void OpenFileWindow_Click(object sender, RoutedEventArgs e)
         {
-          
+            await OpenFileWindow();            
+        }
+
+        private async Task OpenFileWindow()
+        {
             FileOpenPicker openPicker = new FileOpenPicker();
-            openPicker.SetOwnerWindow(this);
-            openPicker.ViewMode = PickerViewMode.Thumbnail;
-            openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-            openPicker.FileTypeFilter.Add(".jpg");
+        openPicker.SetOwnerWindow(this);
+        openPicker.ViewMode = PickerViewMode.Thumbnail;
+        openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+        openPicker.FileTypeFilter.Add(".jpg");
             openPicker.FileTypeFilter.Add(".jpeg");
             openPicker.FileTypeFilter.Add(".png");
 
             StorageFile file = await openPicker.PickSingleFileAsync();
 
             //var source = FileToSBS(file);
-
+            if (file == null)
+                return;
             SoftwareBitmap softwareBitmap;
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.Read))
             {
                 //create decoder
                 BitmapDecoder decoder = await BitmapDecoder.CreateAsync(stream);
-                //Get softwarebitmap from file.
-                softwareBitmap = await decoder.GetSoftwareBitmapAsync();
+    //Get softwarebitmap from file.
+    softwareBitmap = await decoder.GetSoftwareBitmapAsync();
 
-            }
+}
 
-            if (softwareBitmap.BitmapPixelFormat != BitmapPixelFormat.Bgra8 ||
-                 softwareBitmap.BitmapAlphaMode == BitmapAlphaMode.Straight)
-            {
-                softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
-            }
-            var source = new SoftwareBitmapSource();
-            await source.SetBitmapAsync(softwareBitmap);
-  
-
+if (softwareBitmap.BitmapPixelFormat != BitmapPixelFormat.Bgra8 ||
+     softwareBitmap.BitmapAlphaMode == BitmapAlphaMode.Straight)
+{
+    softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
+}
+var source = new SoftwareBitmapSource();
+await source.SetBitmapAsync(softwareBitmap);
 
 
 
-            selectedImage.Source = source;
-
+setWindowToBitmapRatioSize(softwareBitmap);
+selectedImage.Source = source;
         }
 
-        //private async SoftwareBitmapSource FileToSBS(StorageFile file)
-        //{
 
-           
-                
-        //    SoftwareBitmap softwareBitmap;
-        //    using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.Read))
-        //    {
-        //        //create decoder
-        //        BitmapDecoder decoder = await BitmapDecoder.CreateAsync(stream);
-        //        //Get softwarebitmap from file.
-        //        softwareBitmap = await decoder.GetSoftwareBitmapAsync();
+        private double setWindowToBitmapRatioSize(SoftwareBitmap image)
+        {
 
-        //    }
+            ratio = image.PixelHeight / image.PixelWidth;
 
-        //    if (softwareBitmap.BitmapPixelFormat != BitmapPixelFormat.Bgra8 ||
-        //         softwareBitmap.BitmapAlphaMode == BitmapAlphaMode.Straight)
-        //    {
-        //        softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
-        //    }
-        //    var source = new SoftwareBitmapSource();
-        //    await source.SetBitmapAsync(softwareBitmap);
-        //    return source;
-        //}
+            //TODO get monitor size, and have the images resized if too large
+            
+            this.Height = image.PixelHeight;
+            this.Width = image.PixelWidth;
+
+              
+            return ratio;
+        }
+
+        
 
 
+        private void pinToTopToggle(object sender, RoutedEventArgs e)
+        {
+            IsAlwaysOnTop = (IsAlwaysOnTop) ? false : true;
+        }
 
-
+        private void Image_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            var flyout = FlyoutBase.GetAttachedFlyout((FrameworkElement)sender);
+            var options = new FlyoutShowOptions()
+            {
+                //position shows the flyout next to the pointer.
+                //"Transient" ShowMode makes the flyout open in its collapsed state
+                Position = e.GetPosition((FrameworkElement)sender),
+                ShowMode = FlyoutShowMode.Transient
+            };
+            flyout?.ShowAt((FrameworkElement)sender, options);
+        }
     }
 }

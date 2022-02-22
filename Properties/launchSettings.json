@@ -1,8 +1,7 @@
 {
   "profiles": {
     "ImageOverlay (Package)": {
-      "commandName": "MsixPackage",
-      "commandLineArgs": "b://847.jpg"
+      "commandName": "MsixPackage"
     },
     "ImageOverlay (Unpackaged)": {
       "commandName": "Project"
