@@ -7,5 +7,25 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
+    <!--<Grid  >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <CommandBarFlyout x:Name="ImageCommandsFlyout">
+                <AppBarButton Icon="OpenLocal" ToolTipService.ToolTip="Open image" Click="OpenFileWindow_Click"/>
+                <AppBarToggleButton Icon="Pin"  x:Name="pinToTopToggleButton" ToolTipService.ToolTip="Pin to Front" Click="pinToTopToggle"/>
+            </CommandBarFlyout>
+        </Grid.Resources>
+        <Image x:Name="selectedImage" Stretch="Uniform"
+               Tapped="Image_Tapped" FlyoutBase.AttachedFlyout="{x:Bind ImageCommandsFlyout}"
+               ContextFlyout="{x:Bind ImageCommandsFlyout}"/>
+    </Grid>-->
+
+
 
 </UserControl>

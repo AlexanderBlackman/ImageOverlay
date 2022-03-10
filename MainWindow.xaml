@@ -8,10 +8,8 @@
     xmlns:winex="using:WinUIEx"
     mc:Ignorable="d"
     Height="400" Width="400"
-    
-    >
-    <Grid  >
-
+   >
+    <Grid x:Name="imageGrid" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -28,17 +26,7 @@
         <Image x:Name="selectedImage" Stretch="Uniform"
                Tapped="Image_Tapped" FlyoutBase.AttachedFlyout="{x:Bind ImageCommandsFlyout}"
                ContextFlyout="{x:Bind ImageCommandsFlyout}"/>
-
-        <!--<CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Bottom" Foreground="LightGreen">
-
-            <CommandBar.SecondaryCommands>
-            <AppBarButton Icon="OpenLocal" Label="Open Picture" Click="OpenFileWindow_Click"/>
-            <AppBarToggleButton Icon="Pin" Label="Pin to top" x:Name="pinToTopToggleButton" Content="Pin to Front" Click="pinToTopToggle"/>
-            </CommandBar.SecondaryCommands>
-        </CommandBar>-->
-
-
-
     </Grid>
+
 
 </winex:WindowEx>

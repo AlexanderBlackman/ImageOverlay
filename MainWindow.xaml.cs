@@ -32,33 +32,31 @@ namespace ImageOverlay
     /// </summary>
     /// 
 
-    [ComImport, System.Runtime.InteropServices.Guid("3E68D4BD-7135-4D10-8018-9FB6D9F33FA1"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface IInitializeWithWindow
-    {
-        void Initialize([In] IntPtr hwnd);
-    }
-
-   
 
     public sealed partial class MainWindow : WindowEx
     {
         double ratio;
 
-        //[DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto, PreserveSig = true, SetLastError = false)]
-        //public static extern IntPtr GetActiveWindow();
-
+        //WindowEx rootWindow = (WindowEx)Window.Current;
         public MainWindow()
         {
             this.InitializeComponent();
             // this.SizeChanged += MainWindow_SizeChanged; 
             string[] arguments = Environment.GetCommandLineArgs();
-            LoadImageOnLaunch();
+            this.ExtendsContentIntoTitleBar = true;
+            SetTitleBar(selectedImage);
             
-            
-            
-           // OpenFileWindow();
 
+            LoadImageOnLaunch();
+
+
+
+            // OpenFileWindow();
         }
+
+   
+
+
 
         private void MainWindow_SizeChanged(object sender, WindowSizeChangedEventArgs args)
         {
@@ -69,7 +67,7 @@ namespace ImageOverlay
         private void LoadImageOnLaunch()
         {
             string[] arguments = Environment.GetCommandLineArgs();
-            if (arguments.Length > 1 )
+            if (arguments.Length > 1)
             {
                 selectedImage.Source = new BitmapImage(new Uri(arguments[1]));
             }
@@ -80,26 +78,26 @@ namespace ImageOverlay
 
         public void SetImageSource()
         {
-          //  
-          ////selectedImage.Source = new BitmapImage(new Uri("b://847.jpg"));
+            //  
+            ////selectedImage.Source = new BitmapImage(new Uri("b://847.jpg"));
 
-          //  if (arguments[1] != null)
-          //      selectedImage.Source = new BitmapImage(new Uri(arguments[1]));
+            //  if (arguments[1] != null)
+            //      selectedImage.Source = new BitmapImage(new Uri(arguments[1]));
 
         }
 
         private async void OpenFileWindow_Click(object sender, RoutedEventArgs e)
         {
-            await OpenFileWindow();            
+            await OpenFileWindow();
         }
 
         private async Task OpenFileWindow()
         {
             FileOpenPicker openPicker = new FileOpenPicker();
-        openPicker.SetOwnerWindow(this);
-        openPicker.ViewMode = PickerViewMode.Thumbnail;
-        openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-        openPicker.FileTypeFilter.Add(".jpg");
+            openPicker.SetOwnerWindow(this);
+            openPicker.ViewMode = PickerViewMode.Thumbnail;
+            openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            openPicker.FileTypeFilter.Add(".jpg");
             openPicker.FileTypeFilter.Add(".jpeg");
             openPicker.FileTypeFilter.Add(".png");
 
@@ -113,23 +111,23 @@ namespace ImageOverlay
             {
                 //create decoder
                 BitmapDecoder decoder = await BitmapDecoder.CreateAsync(stream);
-    //Get softwarebitmap from file.
-    softwareBitmap = await decoder.GetSoftwareBitmapAsync();
+                //Get softwarebitmap from file.
+                softwareBitmap = await decoder.GetSoftwareBitmapAsync();
 
-}
+            }
 
-if (softwareBitmap.BitmapPixelFormat != BitmapPixelFormat.Bgra8 ||
-     softwareBitmap.BitmapAlphaMode == BitmapAlphaMode.Straight)
-{
-    softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
-}
-var source = new SoftwareBitmapSource();
-await source.SetBitmapAsync(softwareBitmap);
+            if (softwareBitmap.BitmapPixelFormat != BitmapPixelFormat.Bgra8 ||
+                 softwareBitmap.BitmapAlphaMode == BitmapAlphaMode.Straight)
+            {
+                softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
+            }
+            var source = new SoftwareBitmapSource();
+            await source.SetBitmapAsync(softwareBitmap);
 
 
 
-setWindowToBitmapRatioSize(softwareBitmap);
-selectedImage.Source = source;
+            setWindowToBitmapRatioSize(softwareBitmap);
+            selectedImage.Source = source;
         }
 
 
@@ -139,20 +137,20 @@ selectedImage.Source = source;
             ratio = image.PixelHeight / image.PixelWidth;
 
             //TODO get monitor size, and have the images resized if too large
-            
+
             this.Height = image.PixelHeight;
             this.Width = image.PixelWidth;
 
-              
+
             return ratio;
         }
 
-        
+
 
 
         private void pinToTopToggle(object sender, RoutedEventArgs e)
         {
-            IsAlwaysOnTop = (IsAlwaysOnTop) ? false : true;
+            this.IsAlwaysOnTop = (this.IsAlwaysOnTop) ? false : true;
         }
 
         private void Image_Tapped(object sender, TappedRoutedEventArgs e)
@@ -167,5 +165,60 @@ selectedImage.Source = source;
             };
             flyout?.ShowAt((FrameworkElement)sender, options);
         }
+
+        private void closeApp(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //[DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto, PreserveSig = true, SetLastError = false)]
+        //public static extern IntPtr GetActiveWindow();
+
+        //public MainWindow()
+        //{
+        //    this.InitializeComponent();
+
+        //   Image image = new Image() { Source = new BitmapImage(new Uri("b://motivate3.jpg")) };
+        //   // TapableImage image = new TapableImage();
+
+
+        //    //TitleBar = image;
+
+        //    this.ExtendsContentIntoTitleBar = true;
+        //    this.IsAlwaysOnTop = true;
+        //    SetTitleBar(imageGrid);
+        // this.SizeChanged += MainWindow_SizeChanged; 
+        //    string[] arguments = Environment.GetCommandLineArgs();
+        //  LoadImageOnLaunch();
+
+
+
+        // OpenFileWindow();
+
+
+
     }
 }
