@@ -44,8 +44,8 @@ namespace ImageOverlay
             // this.SizeChanged += MainWindow_SizeChanged; 
             string[] arguments = Environment.GetCommandLineArgs();
             this.IsTitleBarVisible = false;
-            this.ExtendsContentIntoTitleBar = true;
-            SetTitleBar(toolbarGrid);
+            //this.ExtendsContentIntoTitleBar = true;
+            //SetTitleBar(toolbarGrid);
 
             LoadImageOnLaunch();
 
@@ -54,7 +54,7 @@ namespace ImageOverlay
             // OpenFileWindow();
         }
 
-   
+
 
 
 
@@ -179,7 +179,7 @@ namespace ImageOverlay
 
 
 
-
+        //IDEA  See what happens when you set the Drag event 
 
 
 
