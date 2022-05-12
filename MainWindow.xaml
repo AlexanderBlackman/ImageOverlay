@@ -18,14 +18,27 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.Resources>
-            <CommandBarFlyout x:Name="ImageCommandsFlyout">
+            <CommandBarFlyout x:Name="ImageCommandsFlyout" ScrollViewer.HorizontalScrollMode="Disabled">
                 <AppBarButton Icon="OpenLocal" ToolTipService.ToolTip="Open image" Click="OpenFileWindow_Click"/>
                 <AppBarToggleButton Icon="Pin"  x:Name="pinToTopToggleButton" ToolTipService.ToolTip="Pin to Front" Click="pinToTopToggle"/>
+                <AppBarButton Icon="Cancel" Click="closeApp" ToolTipService.ToolTip="Close app"/>
             </CommandBarFlyout>
         </Grid.Resources>
-        <Image x:Name="selectedImage" Stretch="Uniform"
+        <Grid x:Name="toolbarGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Image x:Name="selectedImage" Stretch="Uniform"
                Tapped="Image_Tapped" FlyoutBase.AttachedFlyout="{x:Bind ImageCommandsFlyout}"
-               ContextFlyout="{x:Bind ImageCommandsFlyout}"/>
+               ContextFlyout="{x:Bind ImageCommandsFlyout}"
+               Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+        </Grid>
     </Grid>
 
 

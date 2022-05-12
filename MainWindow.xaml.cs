@@ -43,9 +43,9 @@ namespace ImageOverlay
             this.InitializeComponent();
             // this.SizeChanged += MainWindow_SizeChanged; 
             string[] arguments = Environment.GetCommandLineArgs();
+            this.IsTitleBarVisible = false;
             this.ExtendsContentIntoTitleBar = true;
-            SetTitleBar(selectedImage);
-            
+            SetTitleBar(toolbarGrid);
 
             LoadImageOnLaunch();
 
@@ -168,7 +168,7 @@ namespace ImageOverlay
 
         private void closeApp(object sender, RoutedEventArgs e)
         {
-
+            this.Close();
         }
 
 
