@@ -36,6 +36,8 @@ namespace ImageOverlay
     public sealed partial class MainWindow : WindowEx
     {
         double ratio;
+        public double WindowWidth { get; set; }
+        public double WindowHeight { get; set; }
 
         //WindowEx rootWindow = (WindowEx)Window.Current;
         public MainWindow()
@@ -44,8 +46,9 @@ namespace ImageOverlay
             // this.SizeChanged += MainWindow_SizeChanged; 
             string[] arguments = Environment.GetCommandLineArgs();
             this.IsTitleBarVisible = false;
-            //this.ExtendsContentIntoTitleBar = true;
-            //SetTitleBar(toolbarGrid);
+            this.ExtendsContentIntoTitleBar = true;
+            SetTitleBar(toolbarGrid);
+            this.Title = "ImageOverlay";
 
             LoadImageOnLaunch();
 
