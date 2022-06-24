@@ -9,14 +9,18 @@
     mc:Ignorable="d"
     Height="400" Width="400"
     MinWidth="200"
+    
+    
    >
-    <Grid x:Name="imageGrid" >
+    <Grid x:Name="imageGrid" 
+          PointerPressed="imageGrid_PointerPressed"
+          PointerReleased="imageGrid_PointerReleased">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.Resources>
             <CommandBarFlyout x:Name="ImageCommandsFlyout" ScrollViewer.HorizontalScrollMode="Disabled"
@@ -39,8 +43,11 @@
 
             <Image x:Name="selectedImage" Stretch="Uniform"
                Tapped="Image_Tapped" FlyoutBase.AttachedFlyout="{x:Bind ImageCommandsFlyout}"
+                   PointerReleased="selectedImage_PointerReleased"
+                   PointerPressed="selectedImage_PointerPressed"
                ContextFlyout="{x:Bind ImageCommandsFlyout}"
                Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+            <Grid x:Name="cheekyTitlebarspace" Grid.Row="1"/>
         </Grid>
     </Grid>
 
